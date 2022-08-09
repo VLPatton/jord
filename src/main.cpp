@@ -16,6 +16,13 @@ You should have received a copy of the GNU General Public License along with Jor
 
 #define WIN_TITLE "game"
 
+#define DO_QUOTE(x) #x
+#define QUOTE(x) DO_QUOTE(x)
+
+#ifndef __PREFIX
+#define __PREFIX ./
+#endif
+
 int main(void) {
     // Force glfw to init, if it doesn't, call abort()
     assert(glfwInit());
@@ -34,7 +41,7 @@ int main(void) {
         0.0f,  1.0f, 0.0f
     };
     render::triangle* tri = new render::triangle(tri_data, glm::vec3(0.0f, 0.0f, 0.0f));
-    render::shaders* shader = new render::shaders("shaders/vertex.vs", "shaders/fragment.fs");
+    render::shaders* shader = new render::shaders(QUOTE(__PREFIX) + std::string("shaders/vertex.vs"), QUOTE(__PREFIX) + std::string("shaders/fragment.fs"));
     
     glEnableVertexAttribArray(0);
     glClearColor(0.4f, 0.6f, 0.9f, 0.0f);   // Sky blue background
