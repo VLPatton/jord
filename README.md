@@ -33,10 +33,15 @@ You should have received a copy of the GNU General Public License along with thi
 `tinyobjloader` : MIT License, compatible with GNU GPLv3 <br>
 `DevIL` : GNU Lesser GPL v2.1, compatible with GNU GPLv3
 ## TODO
+### Complete
+* Model loading
+* Object rendering based on models
 ### Current
-* DevIL for texture loading
+* DevIL for 2D texture loading
 ### Pending
 * Basic lighting effects using shading
 * Terrain
 * Interation
 * Entities and dynamic entity models
+### Notes
+The current program, when built, will not properly display the texture. This is a known bug, and is why 2D texture loading is not marked as complete.
