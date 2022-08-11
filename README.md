@@ -13,7 +13,16 @@ Jord uses OpenGL 3.3; if your GPU does not support this version at a minimum, it
     * 16 GB RAM, 4 GB VRAM
 ### Software Requirements
 Jord has no distro-specific dependencies for Linux, but macOS and Windows are strictly not supported, even if it's easy to get working on those platforms. The tested OS is Arch Linux, running the newest stable kernel at each release, with KDE Plasma/X11 as the graphical environment. <br>
-It is important to mention that there are certain dependencies which do need to be met at runtime and compilation. Importantly, an OpenGL implementation must be available on your distro of choice (such as `mesa`), as well as GL Math (pacman: `glm`), GLFW (pacman: `glfw`), and GLEW (pacman: `glew`). Compilation dependencies include `gcc` and `make`, other than the libraries previously mentioned. The compiler (gcc) and GNU Make can be installed together on most distros (pacman: `base-devel`, apt: `build-essential`); read your distro's package docs for information on where to obtain all of the mentioned dependencies.
+It is important to mention that there are certain dependencies which do need to be met at runtime and compilation. Importantly, an OpenGL implementation must be available on your distro of choice (such as `mesa`), as well as GL Math (pacman: `glm`), GLFW (pacman: `glfw`), Developers Image Library (no PM candidate, must be installed from source), and GLEW (pacman: `glew`). Compilation dependencies include `gcc` and `make`, other than the libraries previously mentioned. The compiler (gcc) and GNU Make can be installed together on most distros (pacman: `base-devel`, apt: `build-essential`); read your distro's package docs for information on where to obtain all of the mentioned dependencies.
+### Installing DevIL
+Download the source from either Github or the website (the latter being in a .tar.gz format); the following steps assume you have extracted the source code some how. In the root directory of the DevIL source code (it's a bit confusing, but you should only see three subdirs and a couple files, the actual source is in those subdirs), run the following commands as a regular user:
+<pre>
+cd DevIL
+mkdir build && cd build
+cmake ..
+make
+make install
+</pre>
 ## Licensing and Notes
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -21,4 +30,13 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 ### Third Party Licenses
-`tinyobjloader` : MIT License, compatible with GPLv3
+`tinyobjloader` : MIT License, compatible with GNU GPLv3 <br>
+`DevIL` : GNU Lesser GPL v2.1, compatible with GNU GPLv3
+## TODO
+### Current
+* DevIL for texture loading
+### Pending
+* Basic lighting effects using shading
+* Terrain
+* Interation
+* Entities and dynamic entity models

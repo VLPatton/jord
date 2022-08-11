@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License along with Jor
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <rendering/triangle.h>
+#include <obj/objwrapper.h>
 
 namespace render {
     class va {
@@ -21,6 +22,7 @@ namespace render {
             va();
             ~va();
             void triangleDraw(triangle*);
+            void objDraw(obj::obj3d*);
 
         private:
             GLuint vaID;

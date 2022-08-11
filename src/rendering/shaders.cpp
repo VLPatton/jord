@@ -27,7 +27,7 @@ render::shaders::shaders(std::string vert_filename, std::string frag_filename) {
         vert_code = sstr.str();
         vert_stream.close();
     } else {
-        printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vert_filename.c_str());
+        printf("[E] render::shaders : Impossible to open %s.\n", vert_filename.c_str());
         getchar();
     }
 
@@ -39,7 +39,7 @@ render::shaders::shaders(std::string vert_filename, std::string frag_filename) {
         frag_code = sstr.str();
         frag_stream.close();
     } else {
-        printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", frag_filename.c_str());
+        printf("[E] render::shaders : Impossible to open %s.\n", frag_filename.c_str());
         getchar();
     }
 
@@ -47,7 +47,7 @@ render::shaders::shaders(std::string vert_filename, std::string frag_filename) {
     int ILL; // Info Log Length
 
     // Compile Vertex Shader
-    printf("Compiling shader: %s\n", vert_filename.c_str());
+    printf("[I] render::shaders : Compiling shader: %s\n", vert_filename.c_str());
     char const* vert_pointer = vert_code.c_str();
     glShaderSource(vert_shaderID, 1, &vert_pointer, NULL);
     glCompileShader(vert_shaderID);
@@ -58,11 +58,11 @@ render::shaders::shaders(std::string vert_filename, std::string frag_filename) {
     if (ILL > 0) {
         std::vector<char> vert_err(ILL + 1);
         glGetShaderInfoLog(vert_shaderID, ILL, NULL, &vert_err[0]);
-        printf("%s\n", &vert_err[0]);
+        printf("[E] OpenGL : %s\n", &vert_err[0]);
     }
 
     // Compile Fragment Shader
-    printf("Compiling shader: %s\n", frag_filename.c_str());
+    printf("[I] render::shaders : Compiling shader: %s\n", frag_filename.c_str());
     char const* frag_pointer = frag_code.c_str();
     glShaderSource(frag_shaderID, 1, &frag_pointer, NULL);
     glCompileShader(frag_shaderID);
@@ -73,11 +73,11 @@ render::shaders::shaders(std::string vert_filename, std::string frag_filename) {
     if (ILL > 0) {
         std::vector<char> frag_err(ILL + 1);
         glGetShaderInfoLog(frag_shaderID, ILL, NULL, &frag_err[0]);
-        printf("%s\n", &frag_err[0]);
+        printf("[E] OpenGL : %s\n", &frag_err[0]);
     }
 
     // Link the program
-    printf("Linking program\n");
+    printf("[I] render::shaders : Linking program\n");
     GLuint programID = glCreateProgram();
     glAttachShader(programID, vert_shaderID);
     glAttachShader(programID, frag_shaderID);
@@ -89,7 +89,7 @@ render::shaders::shaders(std::string vert_filename, std::string frag_filename) {
     if (ILL > 0) {
         std::vector<char> program_err(ILL + 1);
         glGetProgramInfoLog(programID, ILL, NULL, &program_err[0]);
-        printf("%s\n", &program_err[0]);
+        printf("[E] OpenGL : %s\n", &program_err[0]);
     }
 
     glDetachShader(programID, vert_shaderID);

@@ -12,11 +12,11 @@ You should have received a copy of the GNU General Public License along with Jor
 
 render::triangle::triangle(GLfloat rels[9], glm::vec3 pos) {
     for (int i = 0; i < 9; i++) {
-        verticesNorm[i] = rels[i];
+        vertices[i] = rels[i];
     }
     glGenBuffers(1, &vb);
     glBindBuffer(GL_ARRAY_BUFFER, vb);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verticesNorm), verticesNorm, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     model = glm::translate(glm::mat4(1.0f), pos);
 }

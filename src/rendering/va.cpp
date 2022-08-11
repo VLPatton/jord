@@ -22,13 +22,41 @@ render::va::~va() {
 void render::va::triangleDraw(triangle* tri) {
     glBindBuffer(GL_ARRAY_BUFFER, tri->vb);
     glVertexAttribPointer(
-    0,                  // attribute 0 (vertices)
-    3,                  // size
-    GL_FLOAT,           // type
-    GL_FALSE,           // normalized?
-    0,                  // stride
-    (void*)0            // array buffer offset
+        0,                  // attribute 0 (vertices)
+        3,                  // size
+        GL_FLOAT,           // type
+        GL_FALSE,           // normalized?
+        0,                  // stride
+        (void*)0            // array buffer offset
     );
     // Draw the triangle!
     glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+}
+
+void render::va::objDraw(obj::obj3d* object) {
+    glBindBuffer(GL_ARRAY_BUFFER, object->vb);
+    glVertexAttribPointer(
+        0,                      // attribute 0 (vertices)
+        3,                      // size
+        GL_FLOAT,               // type
+        GL_FALSE,               // normalized?
+        5 * sizeof(GLfloat),    // stride
+        (void*)0                // array buffer offset
+    );
+
+    // Texture stuff
+    glBindTexture(GL_TEXTURE_2D, object->tex->getTexHandle());
+    glUniform1i(object->tex->unit, 0);
+
+    glVertexAttribPointer(
+        1,                      // attribute 1 (textures)
+        2,                      // size
+        GL_FLOAT,               // type
+        GL_FALSE,               // normalized?
+        5 * sizeof(GLfloat),    // stride
+        (void*)(3 * sizeof(GLfloat))    // array buffer offset
+    );
+
+    // Draw the object!
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 }

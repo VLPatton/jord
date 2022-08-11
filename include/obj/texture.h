@@ -8,18 +8,25 @@ Jord is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 You should have received a copy of the GNU General Public License along with Jord. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#version 330 core
+#pragma once
 
-// Interpolated values from the vertex shaders
-in vec2 UV;
+#include <IL/il.h>  // This is the DevIL, which must be installed as a runtime dependency
+#include <string>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-// Ouput data
-out vec4 color;
+namespace obj {
+    class texture {
+        public:
+            texture(std::string, GLuint);
+            ~texture();
+            GLuint getTexHandle();
 
-// Values that stay constant for the whole mesh.
-uniform sampler2D texsampler;
-
-void main(){
-    // Output color = color of the texture at the specified UV
-    color = texture2D(texsampler, UV);
+            GLuint unit;
+        private:
+            //unsigned char* colorbuf;
+            unsigned int width;
+            unsigned int height;
+            GLuint tex;
+    };
 }

@@ -14,6 +14,18 @@ You should have received a copy of the GNU General Public License along with Jor
 #include <GLFW/glfw3.h>
 #include <string>
 #include <rendering/camera.h>
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <IL/il.h>
+
+#define WIN_TITLE "game"
+
+#define DO_QUOTE(x) #x
+#define QUOTE(x) DO_QUOTE(x)
+
+#ifndef __PREFIX
+#define __PREFIX ./
+#endif
 
 namespace proc {
     class proc {

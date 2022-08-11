@@ -10,18 +10,9 @@ You should have received a copy of the GNU General Public License along with Jor
 
 #include <cstdio>
 #include <cassert>
-#include <main.h>
+#include <main.h>   // Most of the main includes are in here
 #include <rendering/vertexarray.h>
 #include <rendering/shaders.h>
-
-#define WIN_TITLE "game"
-
-#define DO_QUOTE(x) #x
-#define QUOTE(x) DO_QUOTE(x)
-
-#ifndef __PREFIX
-#define __PREFIX ./
-#endif
 
 int main(void) {
     // Force glfw to init, if it doesn't, call abort()
@@ -32,18 +23,29 @@ int main(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
 
+    // Initialize OpenGL and DevIL
     proc::proc* the = new proc::proc(WIN_TITLE);
     glewInit();
+    ilInit();
+
+    // Initialize rendering
     render::va* vertArrObj = new render::va();
-    GLfloat tri_data[9] = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f,  1.0f, 0.0f
-    };
-    render::triangle* tri = new render::triangle(tri_data, glm::vec3(0.0f, 0.0f, 0.0f));
     render::shaders* shader = new render::shaders(QUOTE(__PREFIX) + std::string("shaders/vertex.vs"), QUOTE(__PREFIX) + std::string("shaders/fragment.fs"));
+    obj::obj3d* blobject = new obj::obj3d(
+        QUOTE(__PREFIX) + std::string("assets/test.obj"),       // Path to *.obj file to load
+        glm::vec3(0.0f, 0.0f, 0.0f),                            // Global position in space
+        std::string("/home/thyra/Desktop/game-thing/assets/unknowntex.bmp"), // Path to *.bmp texture to load
+        shader->getUniLoc("texsampler")                         // Uniform location for the texture unit
+    ); // Name is temporary :)
     
     glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
+    // Enable depth test
+    glEnable(GL_DEPTH_TEST);
+    // Accept fragment if it closer to the camera than the former one
+    glDepthFunc(GL_LESS);
+
     glClearColor(0.4f, 0.6f, 0.9f, 0.0f);   // Sky blue background
 
     // Create our perspective matrix (TODO: add dynamic FOV and aspect ratio)
@@ -56,24 +58,41 @@ int main(void) {
 
     GLuint mvpID = shader->getUniLoc("MVP");
 
+    // Initiallize timer values
+    double lasttime = glfwGetTime();
+    int frames = 0;
+
     do {
+        // Calculate the time in ms to draw a frame
+        double currtime = glfwGetTime();
+        if (currtime - lasttime >= 1.000) {
+            // Print time and reset counter
+            printf("[I] main() : %f ms/frame\n", 1000.0 / double(frames));
+            frames = 0;
+            lasttime = glfwGetTime();
+        }
+
         // Clear the color and depth bits every frame
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Render
         shader->apply();
-        glm::mat4 mvp = projection * the->camGetView() * tri->model;
+        glm::mat4 mvp = projection * the->camGetView() * blobject->model;
         glUniformMatrix4fv(mvpID, 1, GL_FALSE, &mvp[0][0]);
 
         // Draw
-        vertArrObj->triangleDraw(tri);
+        vertArrObj->objDraw(blobject);
 
         // Swap buffers and poll events
         the->windowSwapBuffers();
         glfwPollEvents();
+
+        // Increment frames counter for the time tracker
+        frames++;
     } while (the->windowShouldClose() == 0);
 
     glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
 
     return 0;
 }

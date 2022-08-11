@@ -21,7 +21,7 @@ namespace render {
             triangle(GLfloat[9], glm::vec3);    // Reltives for vertices, followed by absolute position of the whole triangle
             ~triangle();
 
-            GLfloat verticesNorm[9];
+            GLfloat vertices[9];
             GLuint vb;
             glm::mat4 model;
     };

@@ -11,15 +11,29 @@ You should have received a copy of the GNU General Public License along with Jor
 #pragma once
 
 #include <obj/tinyObjLoader.h>
+#include <obj/texture.h>
 #include <string>
+#include <vector>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 
 // OBJect wrapper namespace
 namespace obj {
     class obj3d {
         public:
-            obj3d(std::string);
+            obj3d(std::string, glm::vec3);
+            obj3d(std::string, glm::vec3, std::string, GLuint);
             ~obj3d();
+            size_t getBufferSize();
+
+            GLuint vb;
+            GLuint uv;
+            glm::mat4 model;
+            texture* tex;
         private:
             tinyobj::ObjReader* reader;
+            std::vector<GLfloat> vertvec;
     };
 }
