@@ -43,7 +43,7 @@ You should have received a copy of the GNU General Public License along with thi
 * Terrain
 ### Pending
 * Basic lighting effects using shading
-* Interation
+* Interaction
 * Entities and dynamic entity models
 ### Notes
-No work has been done since current stable as of this commit. Please wait until next commit.
+The current program, when built, will not properly display the texture. This is a known bug, and is why 2D texture loading is not marked as complete.
