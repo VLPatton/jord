@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License along with Jor
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-namespace obj {
+namespace render::obj {
     class texture {
         public:
             texture(std::string, GLuint);

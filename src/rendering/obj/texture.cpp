@@ -8,11 +8,11 @@ Jord is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 You should have received a copy of the GNU General Public License along with Jord. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <obj/texture.h>
+#include <rendering/obj/texture.h>
 #include <cstdio>
 #include <cassert>
 
-obj::texture::texture(std::string filename, GLuint progunit) {
+render::obj::texture::texture(std::string filename, GLuint progunit) {
     // Create image buffer through DevIL and bind it
     ILuint image;
     ilGenImages(1, &image);
@@ -35,17 +35,19 @@ obj::texture::texture(std::string filename, GLuint progunit) {
     glActiveTexture(GL_TEXTURE0);
     glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, colorbuf);
 
     // Save GL texture parameters
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     unit = progunit;
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Fixes alignment of bytes in the texture
+
+    // Actually load data into the OpenGL texture object
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, colorbuf);
 }
 
-GLuint obj::texture::getTexHandle() {
+GLuint render::obj::texture::getTexHandle() {
     return tex;
 }

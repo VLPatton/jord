@@ -14,6 +14,8 @@ You should have received a copy of the GNU General Public License along with Jor
 #include <rendering/vertexarray.h>
 #include <rendering/shaders.h>
 
+using namespace render;
+
 int main(void) {
     // Force glfw to init, if it doesn't, call abort()
     assert(glfwInit());
@@ -29,8 +31,8 @@ int main(void) {
     ilInit();
 
     // Initialize rendering
-    render::va* vertArrObj = new render::va();
-    render::shaders* shader = new render::shaders(QUOTE(__PREFIX) + std::string("shaders/vertex.vs"), QUOTE(__PREFIX) + std::string("shaders/fragment.fs"));
+    va* vertArrObj = new va();
+    shaders* shader = new shaders(QUOTE(__PREFIX) + std::string("shaders/vertex.vs"), QUOTE(__PREFIX) + std::string("shaders/fragment.fs"));
     obj::obj3d* blobject = new obj::obj3d(
         QUOTE(__PREFIX) + std::string("assets/test.obj"),       // Path to *.obj file to load
         glm::vec3(0.0f, 0.0f, 0.0f),                            // Global position in space

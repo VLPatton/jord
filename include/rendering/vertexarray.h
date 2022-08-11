@@ -14,7 +14,7 @@ You should have received a copy of the GNU General Public License along with Jor
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <rendering/triangle.h>
-#include <obj/objwrapper.h>
+#include <rendering/obj/objwrapper.h>
 
 namespace render {
     class va {

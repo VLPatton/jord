@@ -8,12 +8,12 @@ Jord is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 You should have received a copy of the GNU General Public License along with Jord. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <obj/objwrapper.h>
+#include <rendering/obj/objwrapper.h>
 #include <cassert>
 #include <cstdio>
 
 // TODO: implement usage of materials, textures, normals, and potentially color
-obj::obj3d::obj3d(std::string filename, glm::vec3 pos) {
+render::obj::obj3d::obj3d(std::string filename, glm::vec3 pos) {
     tinyobj::ObjReaderConfig reader_config;
     tinyobj::ObjReader reader;
 
@@ -69,7 +69,7 @@ obj::obj3d::obj3d(std::string filename, glm::vec3 pos) {
 }
 
 // Constructor with the added ability to load a texture from a file called texname
-obj::obj3d::obj3d(std::string filename, glm::vec3 pos, std::string texname, GLuint progunit) {
+render::obj::obj3d::obj3d(std::string filename, glm::vec3 pos, std::string texname, GLuint progunit) {
     tinyobj::ObjReaderConfig reader_config;
     tinyobj::ObjReader reader;
 
@@ -155,6 +155,6 @@ obj::obj3d::obj3d(std::string filename, glm::vec3 pos, std::string texname, GLui
 }
 
 // Returns the size of the vector in number of elements
-size_t obj::obj3d::getBufferSize() {
+size_t render::obj::obj3d::getBufferSize() {
     return vertvec.size();
 }

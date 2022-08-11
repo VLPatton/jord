@@ -10,8 +10,8 @@ You should have received a copy of the GNU General Public License along with Jor
 
 #pragma once
 
-#include <obj/tinyObjLoader.h>
-#include <obj/texture.h>
+#include <rendering/obj/tinyObjLoader.h>
+#include <rendering/obj/texture.h>
 #include <string>
 #include <vector>
 #include <GL/glew.h>
@@ -20,7 +20,7 @@ You should have received a copy of the GNU General Public License along with Jor
 #include <glm/gtx/transform.hpp>
 
 // OBJect wrapper namespace
-namespace obj {
+namespace render::obj {
     class obj3d {
         public:
             obj3d(std::string, glm::vec3);

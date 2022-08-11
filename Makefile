@@ -13,9 +13,9 @@ LDFLAGS:=-lglfw -lstdc++ -lGL -lGLEW -lm -lIL
 # .dvo is for developer/debug object files (practically the same as normal objects, just different file extension)
 
 OBJS=\
-src/obj/tinyObjLoader.o \
-src/obj/texture.o \
-src/obj/objwrapper.o \
+src/rendering/obj/tinyObjLoader.o \
+src/rendering/obj/texture.o \
+src/rendering/obj/objwrapper.o \
 src/rendering/va.o \
 src/rendering/triangle.o \
 src/rendering/shaders.o \

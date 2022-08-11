@@ -33,7 +33,7 @@ void render::va::triangleDraw(triangle* tri) {
     glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
 }
 
-void render::va::objDraw(obj::obj3d* object) {
+void render::va::objDraw(render::obj::obj3d* object) {
     glBindBuffer(GL_ARRAY_BUFFER, object->vb);
     glVertexAttribPointer(
         0,                      // attribute 0 (vertices)
