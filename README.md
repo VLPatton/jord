@@ -46,4 +46,4 @@ You should have received a copy of the GNU General Public License along with thi
 * Interaction
 * Entities and dynamic entity models
 ### Notes
-The current program, when built, will not properly display the texture. This is a known bug, and is why 2D texture loading is not marked as complete.
+No work has been done towards v0.0.1-beta, please wait for next commit(s).
