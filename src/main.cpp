@@ -72,7 +72,9 @@ int main(void) {
         double currtime = glfwGetTime();
         if (currtime - lasttime >= 1.000) {
             // Print time and reset counter
+            #ifdef _DBG
             printf("[I] main() : %f ms/frame\n", 1000.0 / double(frames));
+            #endif
             frames = 0;
             lasttime = glfwGetTime();
         }

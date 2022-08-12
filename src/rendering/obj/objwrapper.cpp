@@ -112,15 +112,17 @@ size_t render::obj::obj::getBufferSize() {
 
 // Rotates the model matrix by the angle given along the axis given
 void render::obj::obj::rotate(float angle, glm::vec3 axis) {
-    prevqangle += angle;
-    axis = glm::normalize(axis);
-    qangle = glm::quat(
+    prevqangle += angle;            // Calculate new angle based on input
+    axis = glm::normalize(axis);    // Normalize the axis coords
+    qangle = glm::quat(             // Create the unit quaternion for rotation based on the angle and axis in w,x,y,z order
         float(cos(prevqangle / 2.0)), 
         axis.x * sin(prevqangle / 2.0), 
         axis.y * sin(prevqangle / 2.0), 
         axis.z * sin(prevqangle / 2.0)
     );
+    #ifdef _DBG
     printf("[I] render::obj::obj : qangle changed: { %f + %fi + %fj + %fk }\n", qangle.w, qangle.x, qangle.y, qangle.z);
+    #endif
     model = glm::translate(glm::mat4(1.0f), pos) * glm::toMat4(qangle);
 }
 

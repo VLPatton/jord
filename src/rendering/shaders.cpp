@@ -47,7 +47,9 @@ render::shaders::shaders(std::string vert_filename, std::string frag_filename) {
     int ILL; // Info Log Length
 
     // Compile Vertex Shader
+    #ifdef _DBG
     printf("[I] render::shaders : Compiling shader: %s\n", vert_filename.c_str());
+    #endif
     char const* vert_pointer = vert_code.c_str();
     glShaderSource(vert_shaderID, 1, &vert_pointer, NULL);
     glCompileShader(vert_shaderID);
@@ -62,7 +64,9 @@ render::shaders::shaders(std::string vert_filename, std::string frag_filename) {
     }
 
     // Compile Fragment Shader
+    #ifdef _DBG
     printf("[I] render::shaders : Compiling shader: %s\n", frag_filename.c_str());
+    #endif
     char const* frag_pointer = frag_code.c_str();
     glShaderSource(frag_shaderID, 1, &frag_pointer, NULL);
     glCompileShader(frag_shaderID);
@@ -77,7 +81,9 @@ render::shaders::shaders(std::string vert_filename, std::string frag_filename) {
     }
 
     // Link the program
+    #ifdef _DBG
     printf("[I] render::shaders : Linking program\n");
+    #endif
     GLuint programID = glCreateProgram();
     glAttachShader(programID, vert_shaderID);
     glAttachShader(programID, frag_shaderID);

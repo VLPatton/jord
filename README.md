@@ -4,7 +4,7 @@ There isn't much to it, it's pretty much just a game like Minecraft but with mor
 Stable: N/A <br>
 Working (Github): v0.0.1-beta
 ### Version Notes
-Current Stable is equivalent in function to current Working, the only major difference is code structure/organization. No performance differences.
+Version v0.0.1-beta currently displays a purple and black cube rotating along the vertical axis. This is calculated in software and future versions will have optimizations made.
 ## Building/Launching the Game
 First, make sure you run `mkdir bin` within the project root. Then, still within the project root, run `make && make install` as regular user to install to home directory. With `sudo` privileges, run `make && sudo make install` to install to `/usr/local`. After making sure that `/usr/local/bin` is in `$PATH`, you can run it from the terminal through the command `jord`.
 ### Hardware Requirements

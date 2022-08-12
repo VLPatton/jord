@@ -3,7 +3,7 @@ CC=gcc
 PREFIX?="./"
 CXXFLAGS:=-Iinclude -std=gnu++17 -Wall -Wextra -O2 # This is for the C++ compiler
 CPPFLAGS:=-D__PREFIX=$(PREFIX) # This is for the C PreProcessor
-DBGFLAGS:=-D__PREFIX="./" -g # For the C PreProcessor when debugging
+DBGFLAGS:=-D__PREFIX="./" -D_DBG -g # For the C PreProcessor when debugging
 LDFLAGS:=-lglfw -lstdc++ -lGL -lGLEW -lm -lIL
 # libs, in order of appearance: GLFW, GNU C++ Runtime, OpenGL, GLEW, Math, DevIL
 
