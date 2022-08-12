@@ -8,6 +8,20 @@ Jord is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 You should have received a copy of the GNU General Public License along with Jord. If not, see <https://www.gnu.org/licenses/>.
 */
 
+/*
+Description:
+
+The namespace render::obj here contains one class: texture. This class's
+constructor loads a texture using DevIL from a *.bmp image and then loads it
+into an OpenGL texture buffer, who's ID is stored as a GLuint in the class. It
+also stores the ID of the texture unit the actual texture data is associated
+with.
+
+Namespace: render::obj
+Classes: texture
+
+*/
+
 #pragma once
 
 #include <IL/il.h>  // This is the DevIL, which must be installed as a runtime dependency
@@ -24,7 +38,7 @@ namespace render::obj {
 
             GLuint unit;
         private:
-            //unsigned char* colorbuf;
+            unsigned char* colorbuf;
             unsigned int width;
             unsigned int height;
             GLuint tex;

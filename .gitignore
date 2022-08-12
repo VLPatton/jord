@@ -1,4 +1,4 @@
 *.o
 *.dvo
 
-jord
+bin/

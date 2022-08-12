@@ -27,7 +27,7 @@ render::obj::texture::texture(std::string filename, GLuint progunit) {
     }
 
     // Get image data and attributes
-    unsigned char* colorbuf = ilGetData();
+    colorbuf = ilGetData();
     width = ilGetInteger(IL_IMAGE_WIDTH);
     height = ilGetInteger(IL_IMAGE_HEIGHT); 
 
@@ -41,7 +41,8 @@ render::obj::texture::texture(std::string filename, GLuint progunit) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    unit = progunit;
+    if (progunit != 0)      // If the given texture unit location is not 0
+        unit = progunit;    // then save it for future use
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Fixes alignment of bytes in the texture
 
     // Actually load data into the OpenGL texture object

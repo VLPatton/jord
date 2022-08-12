@@ -9,67 +9,12 @@ You should have received a copy of the GNU General Public License along with Jor
 */
 
 #include <rendering/obj/objwrapper.h>
+#include <glm/gtx/transform.hpp>
 #include <cassert>
 #include <cstdio>
 
-// TODO: implement usage of materials, textures, normals, and potentially color
-render::obj::obj3d::obj3d(std::string filename, glm::vec3 pos) {
-    tinyobj::ObjReaderConfig reader_config;
-    tinyobj::ObjReader reader;
-
-    if (!reader.ParseFromFile(filename, reader_config)) {
-        if (!reader.Error().empty()) {
-            printf("[E] tinyobj::reader : %s\n", reader.Error().c_str());
-        }
-        assert(0); // Fail intentionally if parsing the file fails
-    }
-
-    if (!reader.Warning().empty()) {
-        printf("[W] tinyobj::reader : %s\n", reader.Warning().c_str());
-    }
-
-    auto& attrib = reader.GetAttrib();
-    auto& shapes = reader.GetShapes();
-
-    // Loop over shapes
-    for (size_t s = 0; s < shapes.size(); s++) {
-        // Loop over faces(polygon)
-        size_t index_offset = 0;
-        for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
-            size_t fv = size_t(shapes[s].mesh.num_face_vertices[f]);
-
-            // Loop over vertices in the face.
-            for (size_t v = 0; v < fv; v++) {
-                // access to vertex
-                tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
-                tinyobj::real_t vx = attrib.vertices[3 * size_t(idx.vertex_index) + 0];
-                tinyobj::real_t vy = attrib.vertices[3 * size_t(idx.vertex_index) + 1];
-                tinyobj::real_t vz = attrib.vertices[3 * size_t(idx.vertex_index) + 2];
-
-                // Push the vertex coords onto the vector so they can be read by OpenGL
-                vertvec.push_back((GLfloat)vx);
-                vertvec.push_back((GLfloat)vy);
-                vertvec.push_back((GLfloat)vz);
-                vertvec.push_back((GLfloat)0);  // Unused UV/texcoord
-                vertvec.push_back((GLfloat)0);  // ^
-            }
-            index_offset += fv;
-        }
-    }
-
-    // Generate and bind the VBO in the class
-    glGenBuffers(1, &vb);
-    glBindBuffer(GL_ARRAY_BUFFER, vb);
-
-    // In the VBO, give the size of the vector and its data to OpenGL
-    glBufferData(GL_ARRAY_BUFFER, vertvec.size() * sizeof(GLfloat), vertvec.data(), GL_STATIC_DRAW);
-
-    // Create the model matrix necessary for proper rendering
-    model = glm::translate(glm::mat4(1.0f), pos);
-}
-
 // Constructor with the added ability to load a texture from a file called texname
-render::obj::obj3d::obj3d(std::string filename, glm::vec3 pos, std::string texname, GLuint progunit) {
+render::obj::obj3d::obj3d(std::string filename, glm::vec3 newpos, std::string texname, GLuint progunit, glm::vec3 angle) {
     tinyobj::ObjReaderConfig reader_config;
     tinyobj::ObjReader reader;
 
@@ -141,7 +86,11 @@ render::obj::obj3d::obj3d(std::string filename, glm::vec3 pos, std::string texna
         }
     }
 
-    tex = new texture(texname, progunit);
+    // Check to make sure the given texture unit and filename aren't 0/empty
+    if (progunit != 0 && !texname.empty())
+        tex = new texture(texname, progunit);
+    else
+        tex = nullptr;
 
     // Generate and bind the VBO in the class
     glGenBuffers(1, &vb);
@@ -150,11 +99,32 @@ render::obj::obj3d::obj3d(std::string filename, glm::vec3 pos, std::string texna
     // In the VBO, give the size of the vector and its data to OpenGL
     glBufferData(GL_ARRAY_BUFFER, vertvec.size() * sizeof(GLfloat), vertvec.data(), GL_STATIC_DRAW);
 
-    // Create the model matrix necessary for proper rendering
-    model = glm::translate(glm::mat4(1.0f), pos);
+    // Create the model matrix necessary for proper rendering, rotated to face the given "angle" vector
+    //lookat(angle);      // Will be used once the method is finished being written
+    pos = newpos;
+    rotate(0, angle);
 }
 
 // Returns the size of the vector in number of elements
-size_t render::obj::obj3d::getBufferSize() {
+size_t render::obj::obj::getBufferSize() {
     return vertvec.size();
+}
+
+// Rotates the model matrix by the angle given along the axis given
+void render::obj::obj::rotate(float angle, glm::vec3 axis) {
+    prevqangle += angle;
+    axis = glm::normalize(axis);
+    qangle = glm::quat(
+        float(cos(prevqangle / 2.0)), 
+        axis.x * sin(prevqangle / 2.0), 
+        axis.y * sin(prevqangle / 2.0), 
+        axis.z * sin(prevqangle / 2.0)
+    );
+    printf("[I] render::obj::obj : qangle changed: { %f + %fi + %fj + %fk }\n", qangle.w, qangle.x, qangle.y, qangle.z);
+    model = glm::translate(glm::mat4(1.0f), pos) * glm::toMat4(qangle);
+}
+
+
+void render::obj::obj::lookat(glm::vec3 point) {
+    point = glm::normalize(point);
 }

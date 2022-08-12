@@ -10,10 +10,43 @@ You should have received a copy of the GNU General Public License along with Jor
 
 #include <rendering/camera.h>
 
-render::camera::camera(glm::vec3 pos) {
+render::camera::camera(glm::vec3 posIn, glm::vec3 angleIn) {
+    pos = posIn;
+    angle = angleIn;
     view = glm::lookAt(
         pos,
-        glm::vec3(0, 0, 0),
+        angle,
         glm::vec3(0, 1.0f, 0)
     );
 }
+
+glm::mat4 render::camera::getview() {
+    return view;
+}
+
+glm::vec3 render::camera::getangle() {
+    return angle;
+}
+
+glm::vec3 render::camera::getpos() {
+    return pos;
+}
+
+void render::camera::moveto(glm::vec3 newpos) {
+    pos = newpos;
+    view = glm::lookAt(
+        pos,
+        angle,
+        glm::vec3(0, 1.0f, 0)
+    );
+}
+
+void render::camera::lookat(glm::vec3 newangle) {
+    pos = newangle;
+    view = glm::lookAt(
+        pos,
+        angle,
+        glm::vec3(0, 1.0f, 0)
+    );
+}
+

@@ -31,5 +31,5 @@ void proc::proc::windowSwapBuffers() {
 }
 
 glm::mat4 proc::proc::camGetView() {
-    return cam->view;
+    return cam->getview();
 }

@@ -33,7 +33,7 @@ void render::va::triangleDraw(triangle* tri) {
     glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
 }
 
-void render::va::objDraw(render::obj::obj3d* object) {
+void render::va::objDraw(render::obj::obj* object) {
     glBindBuffer(GL_ARRAY_BUFFER, object->vb);
     glVertexAttribPointer(
         0,                      // attribute 0 (vertices)
@@ -58,5 +58,6 @@ void render::va::objDraw(render::obj::obj3d* object) {
     );
 
     // Draw the object!
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    // The int cast is to ensure nothing gets messed up bc of typing, due to the division
+    glDrawArrays(GL_TRIANGLES, 0, (int)(object->getBufferSize() / 5) * 3);
 }

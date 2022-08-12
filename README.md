@@ -1,12 +1,12 @@
 # Jord - Some game idea I had
 There isn't much to it, it's pretty much just a game like Minecraft but with more natural terrain. "Jord" is pronounced like English, "yard," but with an "o" instead of "a."
 ## Version
-Stable: v0.0.1-alpha <br>
+Stable: N/A <br>
 Working (Github): v0.0.1-beta
 ### Version Notes
 Current Stable is equivalent in function to current Working, the only major difference is code structure/organization. No performance differences.
 ## Building/Launching the Game
-Within the project root, run `make && make install` as regular user to install to home directory. With `sudo` privileges, run `make && sudo make install` to install to `/usr/local`. After making sure that `/usr/local/bin` is in `$PATH`, you can run it from the terminal through the command `jord`.
+First, make sure you run `mkdir bin` within the project root. Then, still within the project root, run `make && make install` as regular user to install to home directory. With `sudo` privileges, run `make && sudo make install` to install to `/usr/local`. After making sure that `/usr/local/bin` is in `$PATH`, you can run it from the terminal through the command `jord`.
 ### Hardware Requirements
 Jord uses OpenGL 3.3; if your GPU does not support this version at a minimum, it will NOT run. The tested/known-working hardware is below:
 * Core i7 10700K, Geforce RTX 3080 
@@ -39,11 +39,14 @@ You should have received a copy of the GNU General Public License along with thi
 * Model loading
 * Object rendering based on models
 * DevIL for 2D texture loading
+* Model rotation
 ### Current
+* Input through GLFW
+* Camera/model movement
 * Terrain
 ### Pending
 * Basic lighting effects using shading
-* Interaction
+* Physics
 * Entities and dynamic entity models
 ### Notes
-No work has been done towards v0.0.1-beta, please wait for next commit(s).
+Physics will likely be implemented close to last because of how I need to order things.

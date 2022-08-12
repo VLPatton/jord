@@ -37,7 +37,8 @@ int main(void) {
         QUOTE(__PREFIX) + std::string("assets/test.obj"),       // Path to *.obj file to load
         glm::vec3(0.0f, 0.0f, 0.0f),                            // Global position in space
         std::string("/home/thyra/Desktop/game-thing/assets/unknowntex.bmp"), // Path to *.bmp texture to load
-        shader->getUniLoc("texsampler")                         // Uniform location for the texture unit
+        shader->getUniLoc("texsampler"),                        // Uniform location for the texture unit
+        glm::vec3(0, 0.0f, 1.0f)                                   // Point to face from the perspective of the model
     ); // Name is temporary :)
     
     glEnableVertexAttribArray(0);
@@ -47,6 +48,8 @@ int main(void) {
     glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
+    // Cull faces which the camera cannot see
+    glEnable(GL_CULL_FACE);
 
     glClearColor(0.4f, 0.6f, 0.9f, 0.0f);   // Sky blue background
 
@@ -76,6 +79,15 @@ int main(void) {
 
         // Clear the color and depth bits every frame
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Create/complete objects
+        // This method allows us to rotate the object by a relative angle on any relative (maybe?) axis
+        blobject->rotate(0.01f * 3.1415f, glm::vec3(
+            0,
+            1.0f,
+            0
+        )
+        );  // Temp
 
         // Render
         shader->apply();
