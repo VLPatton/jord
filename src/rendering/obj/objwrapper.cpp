@@ -10,13 +10,17 @@ You should have received a copy of the GNU General Public License along with Jor
 
 #include <rendering/obj/objwrapper.h>
 #include <glm/gtx/transform.hpp>
+#include <numbers>
 #include <cassert>
 #include <cstdio>
+
+using std::numbers::pi;
 
 // Constructor with the added ability to load a texture from a file called texname
 render::obj::obj3d::obj3d(std::string filename, glm::vec3 newpos, std::string texname, GLuint progunit, glm::vec3 angle) {
     tinyobj::ObjReaderConfig reader_config;
     tinyobj::ObjReader reader;
+    vertvec = new std::vector<float>();
 
     if (!reader.ParseFromFile(filename, reader_config)) {
         if (!reader.Error().empty()) {
@@ -48,9 +52,9 @@ render::obj::obj3d::obj3d(std::string filename, glm::vec3 newpos, std::string te
                 tinyobj::real_t vz = attrib.vertices[3 * size_t(idx.vertex_index) + 2];
 
                 // Push the vertex coords onto the vector so they can be read by OpenGL
-                vertvec.push_back((GLfloat)vx);
-                vertvec.push_back((GLfloat)vy);
-                vertvec.push_back((GLfloat)vz);
+                vertvec->push_back((GLfloat)vx);
+                vertvec->push_back((GLfloat)vy);
+                vertvec->push_back((GLfloat)vz);
                 /*
                 ////TODO:////
 
@@ -68,12 +72,12 @@ render::obj::obj3d::obj3d(std::string filename, glm::vec3 newpos, std::string te
                 // Check if `texcoord_index` is zero or positive. negative = no texcoord data
                 if (idx.texcoord_index >= 0) {
                     tx = attrib.texcoords[2 * size_t(idx.texcoord_index) + 0];
-                    ty = 1 - attrib.texcoords[2 * size_t(idx.texcoord_index) + 1];
+                    ty = attrib.texcoords[2 * size_t(idx.texcoord_index) + 1];
                 }
 
                 // Push the new texture coords into vertvec
-                vertvec.push_back((GLfloat)tx);
-                vertvec.push_back((GLfloat)ty);
+                vertvec->push_back((GLfloat)tx);
+                vertvec->push_back((GLfloat)ty);
 
                 /*
                 // vertex colors
@@ -97,36 +101,59 @@ render::obj::obj3d::obj3d(std::string filename, glm::vec3 newpos, std::string te
     glBindBuffer(GL_ARRAY_BUFFER, vb);
 
     // In the VBO, give the size of the vector and its data to OpenGL
-    glBufferData(GL_ARRAY_BUFFER, vertvec.size() * sizeof(GLfloat), vertvec.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertvec->size() * sizeof(GLfloat), vertvec->data(), GL_STATIC_DRAW);
 
     // Create the model matrix necessary for proper rendering, rotated to face the given "angle" vector
     //lookat(angle);      // Will be used once the method is finished being written
     pos = newpos;
-    rotate(0, angle);
+    qangle = glm::quat();
+    prevqangle = 0;
+    model = glm::translate(glm::mat4(1.0f), pos);
+    lookat(angle, glm::vec3(0, 1.0f, 0));
 }
 
 // Returns the size of the vector in number of elements
 size_t render::obj::obj::getBufferSize() {
-    return vertvec.size();
+    return vertvec->size();
 }
 
 // Rotates the model matrix by the angle given along the axis given
 void render::obj::obj::rotate(float angle, glm::vec3 axis) {
+    // Method to use without std::vector<glm::quat>
     prevqangle += angle;            // Calculate new angle based on input
-    axis = glm::normalize(axis);    // Normalize the axis coords
+    while (prevqangle > pi * 2) {
+        prevqangle -= pi * 2;
+    }
+    glm::quat oldqangle = qangle;
+
     qangle = glm::quat(             // Create the unit quaternion for rotation based on the angle and axis in w,x,y,z order
-        float(cos(prevqangle / 2.0)), 
+        cos(prevqangle / 2.0), 
         axis.x * sin(prevqangle / 2.0), 
         axis.y * sin(prevqangle / 2.0), 
         axis.z * sin(prevqangle / 2.0)
     );
     #ifdef _DBG
-    printf("[I] render::obj::obj : qangle changed: { %f + %fi + %fj + %fk }\n", qangle.w, qangle.x, qangle.y, qangle.z);
+    printf("[I] render::obj::obj : rotation angle: %f rad; rotation axis: ( %f, %f, %f )\n", prevqangle, axis.x, axis.y, axis.z);
     #endif
-    model = glm::translate(glm::mat4(1.0f), pos) * glm::toMat4(qangle);
+
+    float dotprod = glm::dot(oldqangle, qangle);
+    if (dotprod < 0.0f){
+        qangle = qangle * -1.0f;
+    }
+
+    #ifdef _DBG
+    printf("[I] render::obj::obj : qangle changed: from { %f + %fi + %fj + %fk } to { %f + %fi + %fj + %fk }\n", oldqangle.w, oldqangle.x, oldqangle.y, oldqangle.z, qangle.w, qangle.x, qangle.y, qangle.z);
+    #endif
+    model = glm::translate(glm::mat4(1.0f), pos) * glm::toMat4(oldqangle * qangle);
+
 }
 
-
-void render::obj::obj::lookat(glm::vec3 point) {
+void render::obj::obj::lookat(glm::vec3 point, glm::vec3 upaxis) {
     point = glm::normalize(point);
+    upaxis = glm::normalize(upaxis);
+    #ifdef _DBG
+    printf("[I] render::obj::obj : Normalized point to look at: ( %f, %f, %f )\n", point.x, point.y, point.z);
+    #endif
+
+    rotate(glm::angle(glm::rotation(glm::axis(qangle), point)), upaxis); // ???
 }

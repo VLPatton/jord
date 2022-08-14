@@ -8,7 +8,7 @@ Jord is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 You should have received a copy of the GNU General Public License along with Jord. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <main.h>
+#include <proc/main.h>
 
 proc::proc::proc(std::string title) {
     windowTitle = title;

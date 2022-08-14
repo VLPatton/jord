@@ -1,7 +1,7 @@
 CXX=g++
 CC=gcc
 PREFIX?="./"
-CXXFLAGS:=-Iinclude -std=gnu++17 -Wall -Wextra -O2 # This is for the C++ compiler
+CXXFLAGS:=-Iinclude -std=gnu++20 -Wall -Wextra -O2 # This is for the C++ compiler
 CPPFLAGS:=-D__PREFIX=$(PREFIX) # This is for the C PreProcessor
 DBGFLAGS:=-D__PREFIX="./" -D_DBG -g # For the C PreProcessor when debugging
 LDFLAGS:=-lglfw -lstdc++ -lGL -lGLEW -lm -lIL

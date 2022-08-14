@@ -10,7 +10,7 @@ You should have received a copy of the GNU General Public License along with Jor
 
 #include <cstdio>
 #include <cassert>
-#include <main.h>   // Most of the main includes are in here
+#include <proc/main.h>      // Most of the main includes are in here
 #include <rendering/vertexarray.h>
 #include <rendering/shaders.h>
 
@@ -23,7 +23,7 @@ int main(void) {
     glfwWindowHint(GLFW_SAMPLES, 4);                                // 4x antialiasing
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);                  // We want OpenGL 3.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We want OpenGL Core
 
     // Initialize OpenGL and DevIL
     proc::proc* the = new proc::proc(WIN_TITLE);
@@ -83,13 +83,7 @@ int main(void) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Create/complete objects
-        // This method allows us to rotate the object by a relative angle on any relative (maybe?) axis
-        blobject->rotate(0.01f * 3.1415f, glm::vec3(
-            0,
-            1.0f,
-            0
-        )
-        );  // Temp
+        blobject->lookat(glm::vec3(0, currtime, 1.0f), glm::vec3(1.0f, 0, 0)); // Temp
 
         // Render
         shader->apply();

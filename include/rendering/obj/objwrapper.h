@@ -42,7 +42,7 @@ namespace render::obj {
         public:
             virtual size_t getBufferSize();
             virtual void rotate(float, glm::vec3);
-            virtual void lookat(glm::vec3);
+            virtual void lookat(glm::vec3, glm::vec3);
 
             GLuint vb;
             GLuint uv;
@@ -53,7 +53,7 @@ namespace render::obj {
             glm::quat qangle;   // Orientation quaternion (actually used in the math)
             float prevqangle;   // previous orientation vector
             tinyobj::ObjReader* reader;
-            std::vector<GLfloat> vertvec;
+            std::vector<GLfloat>* vertvec;
     };
 
     class obj3d : public obj {

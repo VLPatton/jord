@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Jor
 #pragma once
 
 #include <glm/glm.hpp>
+#include <rendering/obj/objwrapper.h>
 
 namespace entity {
     enum aliveness {
@@ -28,7 +29,7 @@ namespace entity {
             glm::vec3 moveto(glm::vec3);
 
         protected:
-            obj* model;
+            render::obj::obj* model;
             aliveness state = kZOMB;
-    }
+    };
 }

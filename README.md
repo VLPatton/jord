@@ -50,3 +50,7 @@ You should have received a copy of the GNU General Public License along with thi
 * Entities and dynamic entity models
 ### Notes
 Physics will likely be implemented close to last because of how I need to order things.
+## Known Bugs
+There is a known bug with model rotation where it will jump very quickly from one orientation to another (the jump takes less than 60ms, or 3 frames at 60FPS). I do not expect this to be an issue as it only seems to occur b/c of a number overflow, which I cannot easily fix. Feel free to submit a fix later, but for now I am moving on with other code.
+## Contribution
+If you would like to help improve or add something to Jord, feel free to fork the repo and if the fork fits my goals, then we may be able to merge the repos. 

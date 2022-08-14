@@ -1,4 +1,6 @@
 *.o
 *.dvo
+*.plist
 
 bin/
+.cache/
