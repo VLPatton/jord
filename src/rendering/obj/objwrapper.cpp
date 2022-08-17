@@ -8,6 +8,7 @@ Jord is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 You should have received a copy of the GNU General Public License along with Jord. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <glm/geometric.hpp>
 #include <rendering/obj/objwrapper.h>
 #include <glm/gtx/transform.hpp>
 #include <numbers>
@@ -106,10 +107,10 @@ render::obj::obj3d::obj3d(std::string filename, glm::vec3 newpos, std::string te
     // Create the model matrix necessary for proper rendering, rotated to face the given "angle" vector
     //lookat(angle);      // Will be used once the method is finished being written
     pos = newpos;
+    direct = glm::vec3(0, 0, 1.0f);
     qangle = glm::quat();
-    prevqangle = 0;
+    prevangle = 0;
     model = glm::translate(glm::mat4(1.0f), pos);
-    lookat(angle, glm::vec3(0, 1.0f, 0));
 }
 
 // Returns the size of the vector in number of elements
@@ -120,40 +121,33 @@ size_t render::obj::obj::getBufferSize() {
 // Rotates the model matrix by the angle given along the axis given
 void render::obj::obj::rotate(float angle, glm::vec3 axis) {
     // Method to use without std::vector<glm::quat>
-    prevqangle += angle;            // Calculate new angle based on input
-    while (prevqangle > pi * 2) {
-        prevqangle -= pi * 2;
-    }
+    prevangle += angle;            // Calculate new angle based on input
+    while (prevangle > pi * 2) 
+        prevangle -= pi * 2;
     glm::quat oldqangle = qangle;
 
     qangle = glm::quat(             // Create the unit quaternion for rotation based on the angle and axis in w,x,y,z order
-        cos(prevqangle / 2.0), 
-        axis.x * sin(prevqangle / 2.0), 
-        axis.y * sin(prevqangle / 2.0), 
-        axis.z * sin(prevqangle / 2.0)
+        cos(prevangle / 2.0), 
+        axis.x * sin(prevangle / 2.0), 
+        axis.y * sin(prevangle / 2.0), 
+        axis.z * sin(prevangle / 2.0)
     );
     #ifdef _DBG
-    printf("[I] render::obj::obj : rotation angle: %f rad; rotation axis: ( %f, %f, %f )\n", prevqangle, axis.x, axis.y, axis.z);
-    #endif
-
-    float dotprod = glm::dot(oldqangle, qangle);
-    if (dotprod < 0.0f){
-        qangle = qangle * -1.0f;
-    }
-
-    #ifdef _DBG
+    printf("[I] render::obj::obj : rotation angle: %f rad; rotation axis: ( %f, %f, %f )\n", angle, axis.x, axis.y, axis.z);
     printf("[I] render::obj::obj : qangle changed: from { %f + %fi + %fj + %fk } to { %f + %fi + %fj + %fk }\n", oldqangle.w, oldqangle.x, oldqangle.y, oldqangle.z, qangle.w, qangle.x, qangle.y, qangle.z);
     #endif
-    model = glm::translate(glm::mat4(1.0f), pos) * glm::toMat4(oldqangle * qangle);
-
+    model = glm::translate(glm::mat4(1.0f), pos) * glm::toMat4(qangle);
 }
 
-void render::obj::obj::lookat(glm::vec3 point, glm::vec3 upaxis) {
-    point = glm::normalize(point);
-    upaxis = glm::normalize(upaxis);
+void render::obj::obj::lookat(glm::vec3 point) {
+    glm::vec3 normpoint = glm::normalize(point);
+
     #ifdef _DBG
-    printf("[I] render::obj::obj : Normalized point to look at: ( %f, %f, %f )\n", point.x, point.y, point.z);
+    printf("[I] render::obj::obj : Normalized point to look at: ( %f, %f, %f )\n", normpoint.x, normpoint.y, normpoint.z);
     #endif
 
-    rotate(glm::angle(glm::rotation(glm::axis(qangle), point)), upaxis); // ???
+    glm::quat rot = glm::rotation(direct, normpoint);   // Find the rotation between the normalized vectors of direction and the point we're trying to face
+    direct = normpoint;                                 // Set the direction to the point we're trying to look at
+
+    rotate(glm::angle(rot), glm::axis(rot)); // ???
 }

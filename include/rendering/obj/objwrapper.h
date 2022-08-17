@@ -42,7 +42,7 @@ namespace render::obj {
         public:
             virtual size_t getBufferSize();
             virtual void rotate(float, glm::vec3);
-            virtual void lookat(glm::vec3, glm::vec3);
+            virtual void lookat(glm::vec3);
 
             GLuint vb;
             GLuint uv;
@@ -50,8 +50,9 @@ namespace render::obj {
             texture* tex;
         protected:
             glm::vec3 pos;      // Position vector
+            glm::vec3 direct;   // Direction vector
             glm::quat qangle;   // Orientation quaternion (actually used in the math)
-            float prevqangle;   // previous orientation vector
+            float prevangle;    // Angle described by the current rotation (I know what the name suggests but it makes sense if you look at src/rendering/obj/objwrapper.cpp)
             tinyobj::ObjReader* reader;
             std::vector<GLfloat>* vertvec;
     };

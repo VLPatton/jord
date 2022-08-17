@@ -83,7 +83,7 @@ int main(void) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Create/complete objects
-        blobject->lookat(glm::vec3(0, currtime, 1.0f), glm::vec3(1.0f, 0, 0)); // Temp
+        blobject->lookat(glm::vec3(0, sin(currtime), cos(currtime))); // Temp
 
         // Render
         shader->apply();
