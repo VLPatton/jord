@@ -110,7 +110,7 @@ render::obj::obj3d::obj3d(std::string filename, glm::vec3 newpos, std::string te
     direct = glm::vec3(0, 0, 1.0f);
     qangle = glm::quat();
     prevangle = 0;
-    model = glm::translate(glm::mat4(1.0f), pos);
+    lookat(angle);
 }
 
 // Returns the size of the vector in number of elements
