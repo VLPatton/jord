@@ -1,6 +1,7 @@
 *.o
 *.dvo
 *.plist
+*.json
 
 bin/
 .cache/
