@@ -36,13 +36,12 @@ Classes: obj; obj3d; obj2d;
 
 // Object wrapper namespace
 namespace render::obj {
-    glm::quat rotateFromVectors(glm::vec3, glm::vec3 = glm::vec3(0, 0, 0));
-
     class obj {
         public:
             virtual size_t getBufferSize();
             virtual void rotate(float, glm::vec3);
             virtual void lookat(glm::vec3);
+            virtual void moveto(glm::vec3);
 
             GLuint vb;
             GLuint uv;

@@ -8,12 +8,17 @@ Jord is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 You should have received a copy of the GNU General Public License along with Jord. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include <entity/player.h>
+#include <common.h>
 
-#include <GLFW/glfw3.h>
-#include <vector>
-
-namespace input {
-    void poll();
+entity::player::player(glm::vec3 newpos, glm::vec3 newangle, GLuint texunit, nlohmann::json& conf) : render::camera(newpos, newangle){
+    model = new render::obj::obj3d(
+        QUOTE(__PREFIX) + std::string("assets/test.obj"),
+        newpos, 
+        QUOTE(__PREFIX) + std::string("assets/unknowntex.bmp"),
+        texunit,
+        newangle
+    );
+    keymap = conf;
 }
 

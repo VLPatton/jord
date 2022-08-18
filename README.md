@@ -40,9 +40,10 @@ You should have received a copy of the GNU General Public License along with thi
 * Object rendering based on models
 * DevIL for 2D texture loading
 * Model rotation
+* Model movement
 ### Current
 * Input through GLFW
-* Camera/model movement
+* Camera
 * Terrain
 ### Pending
 * Basic lighting effects using shading

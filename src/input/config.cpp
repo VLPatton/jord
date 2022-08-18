@@ -8,12 +8,12 @@ Jord is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 You should have received a copy of the GNU General Public License along with Jord. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include <input/config.h>
+#include <fstream>
+#include <string>
 
-#include <GLFW/glfw3.h>
-#include <vector>
-
-namespace input {
-    void poll();
+input::config::config() {
+    std::fstream rawstream = std::fstream(QUOTE(__PREFIX) + std::string("assets/config.json"), rawstream.in);
+    data = nlohmann::json::parse(rawstream);
 }
 

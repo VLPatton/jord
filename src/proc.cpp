@@ -8,14 +8,31 @@ Jord is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 You should have received a copy of the GNU General Public License along with Jord. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "input/config.h"
 #include <proc/main.h>
 
 proc::proc::proc(std::string title) {
     windowTitle = title;
     window = glfwCreateWindow(windowWidth, windowHeight, windowTitle.c_str(), NULL, NULL);
     glfwMakeContextCurrent(window);
+    glewInit();
+    ilInit(); 
 
-    cam = new render::camera(glm::vec3(3, 3, 3));
+    // Initialize rendering
+    vertArrObj = new render::va();
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
+    shader = new render::shaders(QUOTE(__PREFIX) + std::string("shaders/vertex.vs"), QUOTE(__PREFIX) + std::string("shaders/fragment.fs"));
+
+    conf = new input::config();
+
+    plyr = new entity::player(
+        glm::vec3(3, 3, 3),
+        glm::vec3(0, 0, 0),
+        shader->getUniLoc("texunit"),
+        conf->data["keymap"]
+    );
 }
 
 proc::proc::~proc() {
@@ -31,5 +48,13 @@ void proc::proc::windowSwapBuffers() {
 }
 
 glm::mat4 proc::proc::camGetView() {
-    return cam->getview();
+    return plyr->getview();
+}
+
+glm::mat4 proc::proc::plrGetModl() {
+    return plyr->model->model;
+}
+
+void proc::proc::plrDraw() {
+    vertArrObj->objDraw(plyr->model);
 }

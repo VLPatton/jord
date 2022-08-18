@@ -13,19 +13,16 @@ You should have received a copy of the GNU General Public License along with Jor
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
-#include <rendering/camera.h>
+#include <entity/player.h>
+#include <rendering/shaders.h>
+#include <rendering/vertexarray.h>
+#include <input/config.h>
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <IL/il.h>
+#include <common.h>
 
 #define WIN_TITLE "game"
-
-#define DO_QUOTE(x) #x
-#define QUOTE(x) DO_QUOTE(x)
-
-#ifndef __PREFIX
-#define __PREFIX ./
-#endif
 
 namespace proc {
     class proc {
@@ -35,10 +32,16 @@ namespace proc {
             bool windowShouldClose();
             void windowSwapBuffers();
             glm::mat4 camGetView();
+            glm::mat4 plrGetModl();
+            void plrDraw();
+
+            render::shaders* shader;
+            render::va* vertArrObj;
+            input::config* conf;
 
         private:
             GLFWwindow* window;
-            render::camera*     cam;
+            entity::player* plyr;
 
             const int windowWidth = 1366;
             const int windowHeight = 768;

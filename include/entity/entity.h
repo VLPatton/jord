@@ -24,11 +24,9 @@ namespace entity {
 
     class entity {
         public:
-            entity(glm::vec3);  // Creates entity object at specified location
-            ~entity();
-            glm::vec3 moveto(glm::vec3);
+            virtual void moveto(glm::vec3);
+            virtual void lookat(glm::vec3);
 
-        protected:
             render::obj::obj* model;
             aliveness state = kZOMB;
     };

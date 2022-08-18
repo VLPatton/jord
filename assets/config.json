@@ -1,0 +1,8 @@
+{
+    "keymap": {
+        "forward": 87,
+        "left": 65,
+        "back": 83,
+        "right": 68
+    }
+}

@@ -10,10 +10,10 @@ You should have received a copy of the GNU General Public License along with Jor
 
 #pragma once
 
-#include <GLFW/glfw3.h>
-#include <vector>
+#define DO_QUOTE(x) #x
+#define QUOTE(x) DO_QUOTE(x)
 
-namespace input {
-    void poll();
-}
+#ifndef __PREFIX
+#define __PREFIX ./
+#endif
 

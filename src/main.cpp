@@ -8,11 +8,13 @@ Jord is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 You should have received a copy of the GNU General Public License along with Jord. If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "rendering/obj/objwrapper.h"
 #include <cstdio>
 #include <cassert>
 #include <proc/main.h>      // Most of the main includes are in here
 #include <rendering/vertexarray.h>
 #include <rendering/shaders.h>
+#include <input/input.h>
 
 using namespace render;
 
@@ -26,23 +28,9 @@ int main(void) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We want OpenGL Core
 
     // Initialize OpenGL and DevIL
+    // NOTE: this is the most important object in the program, as it contains 
+    // the VAO and shader objects, as well as initializes GLFW and GLEW
     proc::proc* the = new proc::proc(WIN_TITLE);
-    glewInit();
-    ilInit();
-
-    // Initialize rendering
-    va* vertArrObj = new va();
-    shaders* shader = new shaders(QUOTE(__PREFIX) + std::string("shaders/vertex.vs"), QUOTE(__PREFIX) + std::string("shaders/fragment.fs"));
-    obj::obj3d* blobject = new obj::obj3d(
-        QUOTE(__PREFIX) + std::string("assets/test.obj"),       // Path to *.obj file to load
-        glm::vec3(0.0f, 0.0f, 0.0f),                            // Global position in space
-        std::string("/home/thyra/Desktop/game-thing/assets/unknowntex.bmp"), // Path to *.bmp texture to load
-        shader->getUniLoc("texsampler"),                        // Uniform location for the texture unit
-        glm::vec3(0, 0.0f, 1.0f)                                   // Point to face from the perspective of the model
-    ); // Name is temporary :)
-    
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
 
     // Enable depth test
     glEnable(GL_DEPTH_TEST);
@@ -61,11 +49,20 @@ int main(void) {
         100.0f                  // Far clipping plane
     );
 
-    GLuint mvpID = shader->getUniLoc("MVP");
+    GLuint mvpID = the->shader->getUniLoc("MVP");
 
     // Initiallize timer values
     double lasttime = glfwGetTime();
     int frames = 0;
+
+    // Test object
+    obj::obj3d* blobject = new obj::obj3d(
+        QUOTE(__PREFIX) + std::string("assets/test.obj"),
+        glm::vec3(0, 0, 0),
+        QUOTE(__PREFIX) + std::string("assets/unknowntex.bmp"),
+        the->shader->getUniLoc("texunit"),
+        glm::vec3(0, 0, 1.0f)
+    );
 
     do {
         // Calculate the time in ms to draw a frame
@@ -83,15 +80,20 @@ int main(void) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Create/complete objects
-        blobject->lookat(glm::vec3(0, sin(currtime), cos(currtime))); // Temp
+        blobject->moveto(glm::vec3(0, sin(currtime), 0));
 
         // Render
-        shader->apply();
+        the->shader->apply();
         glm::mat4 mvp = projection * the->camGetView() * blobject->model;
         glUniformMatrix4fv(mvpID, 1, GL_FALSE, &mvp[0][0]);
 
         // Draw
-        vertArrObj->objDraw(blobject);
+        the->vertArrObj->objDraw(blobject);
+
+        // Player Rendering
+        mvp = projection * the->camGetView() * the->plrGetModl();
+        glUniformMatrix4fv(mvpID, 1, GL_FALSE, &mvp[0][0]);
+        the->plrDraw();
 
         // Swap buffers and poll events
         the->windowSwapBuffers();

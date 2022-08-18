@@ -140,7 +140,7 @@ void render::obj::obj::rotate(float angle, glm::vec3 axis) {
 }
 
 void render::obj::obj::lookat(glm::vec3 point) {
-    glm::vec3 normpoint = glm::normalize(point);
+    glm::vec3 normpoint = glm::normalize(point - pos);
 
     #ifdef _DBG
     printf("[I] render::obj::obj : Normalized point to look at: ( %f, %f, %f )\n", normpoint.x, normpoint.y, normpoint.z);
@@ -151,3 +151,9 @@ void render::obj::obj::lookat(glm::vec3 point) {
 
     rotate(glm::angle(rot), glm::axis(rot)); // ???
 }
+
+void render::obj::obj::moveto(glm::vec3 newpos) {
+    pos = newpos;
+    model = glm::translate(glm::mat4(1.0f), pos) * glm::toMat4(qangle);
+}
+

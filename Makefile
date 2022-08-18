@@ -20,6 +20,10 @@ src/rendering/va.o \
 src/rendering/triangle.o \
 src/rendering/shaders.o \
 src/rendering/camera.o \
+src/input/input.o \
+src/input/config.o \
+src/entity/entity.o \
+src/entity/player.o \
 src/proc.o \
 src/main.o \
 

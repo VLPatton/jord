@@ -10,3 +10,11 @@ You should have received a copy of the GNU General Public License along with Jor
 
 #include <entity/entity.h>
 
+void entity::entity::lookat(glm::vec3 point) {
+    model->lookat(point);
+}
+
+void entity::entity::moveto(glm::vec3 newpos) {
+    model->moveto(newpos);
+}
+

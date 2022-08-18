@@ -31,7 +31,6 @@ namespace render {
     class camera {
         public:
             camera(glm::vec3, glm::vec3 = glm::vec3(0, 0, 0));  // Init the view matrix at the given position
-            ~camera();
             void lookat(glm::vec3);
             void moveto(glm::vec3);
             glm::vec3 getpos();

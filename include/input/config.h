@@ -10,10 +10,14 @@ You should have received a copy of the GNU General Public License along with Jor
 
 #pragma once
 
-#include <GLFW/glfw3.h>
-#include <vector>
+#include <nlohmann/json.hpp>
+#include <common.h>
 
 namespace input {
-    void poll();
+    class config {
+        public:
+            config();
+            nlohmann::json data;
+    };
 }
 

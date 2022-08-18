@@ -9,3 +9,21 @@ You should have received a copy of the GNU General Public License along with Jor
 */
 
 #pragma once
+
+#include <glm/glm.hpp>
+#include <nlohmann/json.hpp>
+#include <rendering/camera.h>
+#include <entity/entity.h>
+
+namespace entity {
+    class player: public entity, public render::camera {
+        public:
+            // pos, angle, texunit, JSON keymap
+            player(glm::vec3, glm::vec3, GLuint, nlohmann::json&); 
+            void poll();
+
+        private:
+            nlohmann::json keymap;
+    };
+}
+
